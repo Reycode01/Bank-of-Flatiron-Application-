@@ -1,28 +1,52 @@
 import React from "react";
-import Transaction from "./Transaction";
+import axios from "axios"; 
 
-function TransactionsList() {
+function TransactionsList({ transactions, setTransactions, setFilteredTransactions }) {
+  // Define handleDelete function
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8001/transactions/${id}`);
+      const updatedTransactions = transactions.filter(transaction => transaction.id !== id);
+      setTransactions(updatedTransactions); 
+      setFilteredTransactions(updatedTransactions);
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+    }
+  };
+
   return (
     <table className="ui celled striped padded table">
-      <tbody>
+      <thead>
         <tr>
-          <th>
-            <h3 className="ui center aligned header">Date</h3>
-          </th>
-          <th>
-            <h3 className="ui center aligned header">Description</h3>
-          </th>
-          <th>
-            <h3 className="ui center aligned header">Category</h3>
-          </th>
-          <th>
-            <h3 className="ui center aligned header">Amount</h3>
-          </th>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Action</th>{/* New column for delete button */}
         </tr>
-        {/* render a list of <Transaction> components here */}
+      </thead>
+      <tbody>
+        {transactions.map((transaction) => (
+          <tr key={transaction.id}>
+            <td>{transaction.date}</td>
+            <td>{transaction.description}</td>
+            <td>{transaction.category}</td>
+            <td>{transaction.amount}</td>
+            <td>
+              <button onClick={() => handleDelete(transaction.id)}>Delete</button>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
 }
 
 export default TransactionsList;
+
+
+
+
+
+
+

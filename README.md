@@ -14,7 +14,38 @@ list of your recent bank transactions, among other features.
 
 Part of what this code challenge is testing is your ability to follow given
 instructions. While you will definitely have a significant amount of freedom in
-how you implement the features, be sure to carefully read the directions for
+how you implement the features, be sure to carefully read the directions for// App.js
+
+function App() {
+  // Existing code...
+
+  const handleSort = (sortBy) => {
+    let sortedTransactions = [...filteredTransactions];
+    if (sortBy === 'category') {
+      sortedTransactions.sort((a, b) => a.category.localeCompare(b.category));
+    } else if (sortBy === 'description') {
+      sortedTransactions.sort((a, b) => a.description.localeCompare(b.description));
+    }
+    setFilteredTransactions(sortedTransactions);
+  };
+
+  return (
+    <div className="ui raised segment">
+      <div className="ui segment violet inverted">
+        <h2>The Royal Bank of Flatiron</h2>
+      </div>
+      <Search onSearch={handleSearch} />
+      <div>
+        <button onClick={() => handleSort('category')}>Sort by Category</button>
+        <button onClick={() => handleSort('description')}>Sort by Description</button>
+      </div>
+      <AddTransactionForm onAddTransaction={handleAddTransaction} />
+      <TransactionsList transactions={filteredTransactions} />
+    </div>
+  );
+}
+
+export default App;
 setting up the application.
 
 ## Setup
